@@ -1,12 +1,21 @@
 // controllers/convertHandler.js
 const numberRegex = /^[^a-zA-Z]*/;
-const unitRegex = /[a-zA-Z]+$/;
 const validFraction = /^(\d+(\.\d+)?)(\/\d+(\.\d+)?)?$/;
+
+const unitRegex = /[a-zA-Z]+$/;
 const validUnits = ['gal', 'L', 'mi', 'km', 'lbs', 'kg'];
 
 function ConvertHandler() {
+  this.guardInvalidNumberAndUnit = function(input) {
+    if (!isNumberValid(input) && !isUnitValid(input)) {
+      throw new Error('invalid number and unit');
+    }
+  };
+
+  const isNumberValid = (x) => (x.match(numberRegex) && validFraction.test(x.match(numberRegex)[0]));
+  const isUnitValid = (x) => x.match(unitRegex) && validUnits.includes(x.match(unitRegex)[0]);
+
   this.getNum = function(input) {
-    let result;
 
     const numberStr = input.match(numberRegex)[0];
 
@@ -14,28 +23,23 @@ function ConvertHandler() {
       return 1;
     }
 
-    if (!validFraction.test(numberStr)) {
+    if (!isNumberValid(input)) {
       throw new Error('invalid number');
     }
 
-    result = eval(numberStr);
-
-    return result;
+    return eval(numberStr);
   };
 
   this.getUnit = function(input) {
-    let result;
     let unit = input.match(unitRegex)[0];
 
     unit = normalizeUnit(unit);
 
-    if (!validUnits.includes(unit)) {
+    if (!isUnitValid(unit)) {
       throw new Error('invalid unit');
-
     }
 
-    result = unit;
-    return result;
+    return unit;
   };
 
   const normalizeUnit = (unit) => {

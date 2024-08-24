@@ -12,6 +12,8 @@ module.exports = function(app) {
     const input = req.query.input;
 
     try {
+      convertHandler.guardInvalidNumberAndUnit(input);
+
       const initNum = convertHandler.getNum(input);
       const initUnit = convertHandler.getUnit(input);
 
@@ -23,13 +25,13 @@ module.exports = function(app) {
         initUnit: initUnit,
         returnNum: returnNum,
         returnUnit: returnUnit,
-        string: convertHandler.getString(initNum, initUnit, returnNum, returnUnit)
+        string: convertHandler.getString(initNum, initUnit, returnNum, returnUnit),
       });
     } catch (e) {
       if (e.message) {
-        res.json({ error: e.message });
+        res.json({error: e.message});
       } else {
-        res.json({ error: 'Unknown error' });
+        res.json({error: 'Unknown error'});
       }
     }
   });
