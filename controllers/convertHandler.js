@@ -8,14 +8,14 @@ function ConvertHandler() {
   this.getNum = function(input) {
     let result;
 
-    let numberStr = input.match(numberRegex)[0];
+    const numberStr = input.match(numberRegex)[0];
 
     if (numberStr === '') {
       return 1;
     }
 
     if (!validFraction.test(numberStr)) {
-      throw new Error('Invalid number');
+      throw new Error('invalid number');
     }
 
     result = eval(numberStr);
@@ -30,7 +30,7 @@ function ConvertHandler() {
     unit = normalizeUnit(unit);
 
     if (!validUnits.includes(unit)) {
-      throw new Error('Invalid unit');
+      throw new Error('invalid unit');
 
     }
 
@@ -98,11 +98,13 @@ function ConvertHandler() {
         result = initNum / miToKm;
         break;
       default:
-        throw new Error('Invalid unit');
+        throw new Error('invalid unit');
     }
 
-    return Math.round(result * 1e5) / 1e5;
+    return toNthDecimalPlace(result, 1e5);
   };
+
+  const toNthDecimalPlace = (num, n) => Math.round(num * n) / n;
 
   this.getString = function(initNum, initUnit, returnNum, returnUnit) {
     return `${initNum} ${this.spellOutUnit(initUnit)} converts to ${returnNum} ${this.spellOutUnit(returnUnit)}`;
