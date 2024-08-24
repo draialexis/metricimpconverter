@@ -101,7 +101,7 @@ function ConvertHandler() {
         throw new Error('Invalid unit');
     }
 
-    return result;
+    return Math.round(result * 1e5) / 1e5;
   };
 
   this.getString = function(initNum, initUnit, returnNum, returnUnit) {
