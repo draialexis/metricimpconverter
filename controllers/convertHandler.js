@@ -25,19 +25,21 @@ function ConvertHandler() {
 
   this.getUnit = function(input) {
     let result;
-    let unit = input.match(unitRegex)[0].toLowerCase();
+    let unit = input.match(unitRegex)[0];
+
+    unit = normalizeUnit(unit);
 
     if (!validUnits.includes(unit)) {
       throw new Error('Invalid unit');
-    }
 
-    unit = normalizeUnit(unit);
+    }
 
     result = unit;
     return result;
   };
 
   const normalizeUnit = (unit) => {
+    unit = unit.toLowerCase();
     if (unit === 'l') {
       unit = 'L';
     }
